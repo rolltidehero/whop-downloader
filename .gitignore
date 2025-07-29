@@ -1,0 +1,96 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+
+# uv
+.python-version
+
+# Downloads
+downloads/
+logs/
+
+# macOS
+.DS_Store
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Pytest
+.pytest_cache/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Distribution
+dist/
+build/
+*.egg-info/
+
+# Local env
+.env
+.env.local
+
+# Browser data
+.whop_browser_data/
+
+# Debug and test files (not needed for main functionality)
+debug_*.py
+debug_*.json
+test_*.py
+*_debug.py
+*_debug.json
+capture_*.py
+intercept_*.py
+compare_*.py
+deep_*.py
+aggressive_*.py
+fetch_*.py
+parse_*.py
+quick_*.py
+verify_*.py
+check_*.py
+get_*.py
+http_*.py
+
+# Test outputs
+test_output/
+found_video_urls.txt
+video_urls_found.txt
+all_requests.txt
+tracked_urls.txt
+*.html
+captured_*.json
+playwright_*.json
+
+# Course specific debug files
+course_iframe_data.json
+all_lessons.json
+all_requests.txt
+tracked_urls.json
+rsc_*.json
+rsc_*.txt
+
+# Output directories
+debug_output/
+
+# Old versions (we only need whop_downloader.py)
+whop_course_downloader.py
+whop_course_downloader_v2.py
+test_v2_downloader.py
+
+# Shell scripts
+run_capture.sh
+setup_uvx.sh
+
+# Downloaded videos
+*.mp4
+*.m3u8
