@@ -1,7 +1,7 @@
 # Whop Course Downloader (Local version)
 
-**The original required uv\uvx and to download the git repo with each command.**
-**This version allows you to clone the repo and run it like you would normally.**
+- **The original required uv\uvx and to download the git repo with each command.**
+- **This version allows you to clone the repo and run it like you would normally.**
 
 This is a Python script to download video courses from Whop using browser automation. 
 Supports both automatic and manual navigation modes depending on the course structure.
@@ -24,7 +24,7 @@ Supports both automatic and manual navigation modes depending on the course stru
 
 Clone the repository and set up your environment:
 ```sh
-git clone https://github.com/mlapping/whop-downloader.git
+git clone https://github.com/rolltidehero/whop-downloader.git
 cd whop-downloader
 python -m venv .venv
 source .venv/bin/activate      # On Windows: .venv\Scripts\activate
