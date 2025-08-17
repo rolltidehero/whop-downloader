@@ -1,6 +1,10 @@
-# Whop Course Downloader
+# Whop Course Downloader (Local version)
 
-A Python script to download video courses from Whop using browser automation. Supports both automatic and manual navigation modes depending on the course structure.
+**The original required uv\uvx and to download the git repo with each command.**
+**This version allows you to clone the repo and run it like you would normally.**
+
+This is a Python script to download video courses from Whop using browser automation. 
+Supports both automatic and manual navigation modes depending on the course structure.
 
 ## Features
 
@@ -14,76 +18,64 @@ A Python script to download video courses from Whop using browser automation. Su
 - 🔄 **Smart Retries** - Automatically tries different video formats
 - 🧪 **Test Mode** - Verify extraction works before downloading
 
+***
+
 ## Installation
 
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/whop-downloader.git
+Clone the repository and set up your environment:
+```sh
+git clone https://github.com/mlapping/whop-downloader.git
 cd whop-downloader
+python -m venv .venv
+source .venv/bin/activate      # On Windows: .venv\Scripts\activate
+```
 
-# Install Playwright browser (first time only)
+Install dependencies:
+```sh
+pip install -r requirements.txt
 playwright install chromium
+```
+
+Install or update `yt-dlp` if not present:
+```sh
+pip install -U yt-dlp
 ```
 
 ## Usage
 
 ### Download a Course
 
-```bash
-# Basic usage
-uvx --from git+https://github.com/mlapping/whop-downloader.git whop-downloader download <course_url>
-
-# Download to specific directory
-uvx --from git+https://github.com/mlapping/whop-downloader.git whop-downloader download <course_url> "/path/to/save"
-
-# Example with full URL
-uvx --from git+https://github.com/mlapping/whop-downloader.git whop-downloader download https://courses.apps.whop.com/customer-v2/experience/exp_xxx/
-
-# Example with Whop course page
-uvx --from git+https://github.com/mlapping/whop-downloader.git whop-downloader download https://whop.com/your-course-name/
-
-# Retry failed downloads (uses cached URLs)
-uvx --from git+https://github.com/mlapping/whop-downloader.git whop-downloader download https://whop.com/your-course-name/
-
-# Force re-extraction of URLs
-uvx --from git+https://github.com/mlapping/whop-downloader.git whop-downloader download https://whop.com/your-course-name/ --force
+```sh
+python whop_downloader.py download 
+```
+Download to a specific directory:
+```sh
+python whop_downloader.py download  /path/to/save
+```
+Retry failed downloads (uses cached URLs):
+```sh
+python whop_downloader.py download 
+```
+Force re-extraction of URLs:
+```sh
+python whop_downloader.py download  --force
 ```
 
 ### Test Mode
 
 Test extraction without downloading:
-
-```bash
-uvx --from git+https://github.com/mlapping/whop-downloader.git whop-downloader test <course_url>
+```sh
+python whop_downloader.py test 
 ```
 
 ## How it Works
 
-1. **Opens browser with saved session** - Login persists between runs
-2. **Navigates to course** - Uses redirect URL for iframe-based courses
-3. **Keyboard navigation** - Uses ArrowRight key to go through all lessons
-4. **Captures video URLs** - Monitors network traffic for Mux streaming URLs
-5. **Downloads with yt-dlp** - High quality video downloads with resume support
-
-## Commands
-
-### `download` - Download entire course
-```bash
-uvx --from git+https://github.com/mlapping/whop-downloader.git whop-downloader download <course_url> [target_directory] [--force]
-```
-- Uses cached video URLs if available (skip extraction)
-- Downloads videos to `target_directory/downloads/videos/`
-- Skips already downloaded files
-- Saves progress to `video_urls.json`
-- Use `--force` to re-extract URLs even if cache exists
-
-### `test` - Test extraction only
-```bash
-uvx --from git+https://github.com/mlapping/whop-downloader.git whop-downloader test <course_url> [--force]
-```
-- Extracts all video URLs without downloading
-- Useful for verifying the script works with your course
-- Saves URLs to `downloads/video_urls.json` (same as download command)
+- **Opens browser with saved session:** Login persists between runs
+- **Navigates to course:** Uses redirect URL for iframe-based courses
+- **Keyboard navigation:** Uses ArrowRight key to go through all lessons (if supported)
+- **Manual mode:** You manually click through lessons; script captures video URLs
+- **Captures video URLs:** Monitors network traffic for Mux streaming links
+- **Downloads with yt-dlp:** High quality video downloads with resume support
 
 ## Output Structure
 
@@ -99,78 +91,29 @@ target_directory/
         └── ...
 ```
 
-Browser session data is saved in `.whop_browser_data/` in your current directory.
+Browser session data is saved in `.whop_browser_data/` in your current working directory.
 
 ## Troubleshooting
 
-- **Login required**: The browser will open for manual login on first run
-- **Videos not found**: Make sure the course page loads and shows the first video
-- **Download fails**: Check that yt-dlp is installed and up to date
-- **Session expired**: Delete `.whop_browser_data` folder and log in again
+- **Login required:** The browser will open for manual login on first run; session will persist.
+- **Videos not found:** Make sure the course page loads and shows the first video.
+- **Download fails:** Ensure yt-dlp is installed and up to date.
+- **Session expired:** Delete `.whop_browser_data` and log in again.
+- **No videos found:** Make sure you're logged in and that the course page loads properly; for manual mode, click through all lessons.
 
 ## Navigation Modes
 
-### Automatic Mode
-Some courses support keyboard navigation. The script will automatically detect this and use ArrowRight to navigate through lessons:
+**Automatic:** Script detects ArrowRight keyboard navigation for lessons.
 
-```
-✓ Keyboard navigation (ArrowRight) detected
-Using keyboard navigation (ArrowRight key)
-Navigation 1: Found 1 videos
-Navigation 2: Found 2 videos
-...
-```
-
-### Manual Mode
-For courses that don't support keyboard navigation, the script will prompt you to navigate manually:
-
-```
-============================================================
-MANUAL NAVIGATION MODE
-============================================================
-Automatic navigation is not available for this course.
-Please manually click through all lessons in the browser.
-The script will automatically capture video URLs.
-When done, close the browser window.
-============================================================
-```
-
-## Requirements
-
-- Python 3.8+
-- [uv](https://github.com/astral-sh/uv) (for uvx command)
-- Dependencies (automatically installed by uvx):
-  - playwright
-  - yt-dlp
-
-## Troubleshooting
-
-### "Command not found: uvx"
-Install uv first:
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-### "Playwright browser not installed"
-```bash
-playwright install chromium
-```
-
-### "Login required"
-The browser will open for manual login on first run. Your session is saved for future runs.
-
-### "No videos found"
-- Make sure you're logged in
-- Check that the course page loads properly
-- For manual mode, ensure you click through all lessons
+**Manual:** If not supported, manually click through lessons; script will capture video URLs.
 
 ## Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+- Fork the repository
+- Create your feature branch (`git checkout -b feature/amazing-feature`)
+- Commit your changes (`git commit -m 'Add some amazing feature'`)
+- Push to the branch (`git push origin feature/amazing-feature`)
+- Open a Pull Request
 
 ## License
 
